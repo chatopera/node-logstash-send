@@ -1,0 +1,26 @@
+{
+  "name": "node-logstash-send",
+  "version": "1.0.0",
+  "description": "Fast send to logstash.",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "ava": "^1.1.0"
+  },
+  "scripts": {
+    "test": "ava"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Samurais/node-logstash-send.git"
+  },
+  "keywords": [
+    "logstash"
+  ],
+  "author": "Hai Liang Wang <chatopera.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Samurais/node-logstash-send/issues"
+  },
+  "homepage": "https://github.com/Samurais/node-logstash-send#readme"
+}
