@@ -15,13 +15,15 @@ npm install -s node-logstash-send
 
 ## Configuration
 
-* Logstash
+- Logstash
 
-Example of *logstash/pipeline/logstash.conf*.
-
+Example of _logstash/pipeline/logstash.conf_.
 
 ```
 input {
+        tcp {
+                port => 5000
+        }
         http {
                 host => "0.0.0.0"
                 port => "4999"
@@ -29,15 +31,25 @@ input {
 }
 
 ## Add your filters / logstash plugins configuration here
+filter {
+  if ! [lg_pattern_prefix] {
+        mutate { add_field => { "[@metadata][lg_pattern_prefix]" => "logstash" } }
+  } else {
+        mutate { add_field => { "[@metadata][lg_pattern_prefix]" => "%{[lg_pattern_prefix]}" } }
+  }
+}
 
 output {
         elasticsearch {
                 hosts => "elasticsearch:9200"
+                index => "%{[@metadata][lg_pattern_prefix]}-%{+YYYY.MM.dd}"
         }
 }
 ```
 
-* Set Environment variables.
+[Advanced configuration Docs.](https://www.elastic.co/guide/en/logstash/current/plugins-outputs-elasticsearch.html)
+
+- Set Environment variables.
 
 ```
 export LOGSTASH_IP=xx
@@ -54,11 +66,15 @@ process.env["LOGSTASH_IP"] = "venus";
 process.env["LOGSTASH_PORT"] = 49991
 var logstash = require('node-logstash-send')
 logstash({
+    lg_pattern_prefix: "logstash",
     hello: "bar"
     })
 ```
 
-Notice, **it would ignore the error if send failed, to see errors, set** `LOGSTASH_QUIET`  **as** `true` **.**
+| key | description |
+| lg_pattern_prefix | used as index pattern prefix, the patten would be `$lg_pattern_prefix.yyyy.MM.dd` |
+
+Note, **it would ignore the error if send failed, to see errors, set** `LOGSTASH_QUIET` **as** `true` **.**
 
 ### what you get in Kibana
 
@@ -67,6 +83,7 @@ Notice, **it would ignore the error if send failed, to see errors, set** `LOGSTA
 ## ELK
 
 Setup ELK Services with
+
 ```
 https://github.com/samurais/docker-elk
 ```
@@ -76,5 +93,3 @@ https://github.com/samurais/docker-elk
 Copyright (2019) 北京华夏春松科技有限公司
 
 [MIT](./LICENSE)
-
-
