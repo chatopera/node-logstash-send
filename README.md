@@ -71,7 +71,8 @@ logstash({
     })
 ```
 
-| key | description |
+| key               | description                                                                       |
+| ----------------- | --------------------------------------------------------------------------------- |
 | lg_pattern_prefix | used as index pattern prefix, the patten would be `$lg_pattern_prefix.yyyy.MM.dd` |
 
 Note, **it would ignore the error if send failed, to see errors, set** `LOGSTASH_QUIET` **as** `true` **.**
